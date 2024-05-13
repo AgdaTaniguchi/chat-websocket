@@ -3,6 +3,7 @@ import asyncio
 import json
 from Client import Client
 from random import choice
+from socket import gethostname, gethostbyname
 
 all_clients = []
 
@@ -29,8 +30,10 @@ async def new_client_connected(client_socket, path):
         all_clients.remove(client_socket)
 
 async def start_server():
-    print("Server started!")
-    await websockets.serve(new_client_connected, "localhost", 8765)
+    host = '127.0.0.1'
+    port = 8765
+    print(f'Server started at {host}:{port}!')
+    await websockets.serve(new_client_connected, host, port)
 
 if __name__ == '__main__':
     event_loop = asyncio.get_event_loop()
