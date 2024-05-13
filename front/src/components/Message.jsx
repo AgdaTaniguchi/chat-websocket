@@ -7,7 +7,7 @@ export default function Message(message) {
                 <h1 className='font-bold text-xl' style={{'color': info?.color}}>{info?.nickname}</h1>
                 <span className="ml-4 text-sm text-zinc-500">{info?.time}</span>
             </div>
-            <p>{info?.message}</p>
+            <p className="w-full h-fit break-words">{info?.message}</p>
         </div>
     );
 }

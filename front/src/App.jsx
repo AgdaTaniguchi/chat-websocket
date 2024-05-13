@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import Message from "./components/Message";
 
@@ -7,6 +7,7 @@ function App() {
 
     const [userMessage, setUserMessage] = useState("");
     const [messageHistory, setMessageHistory] = useState([]);
+    const chatRef = useRef(null);
 
     const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
 
@@ -15,17 +16,21 @@ function App() {
         event.target.reset();
         sendMessage(userMessage);
     }, []);
-
+    
     useEffect(() => {
         if(lastMessage !== null) {
             setMessageHistory((prev) => prev.concat(lastMessage));
         }
+
+        setTimeout(() => {
+            chatRef.current.scrollTop = chatRef.current.scrollHeight;
+        }, 100);
     }, [lastMessage, setMessageHistory]);
 
     return (
         <>
             <div className="h-screen flex flex-col">
-                <div className="h-full w-full max-w-7xl overflow-auto px-24 mx-auto mt-12">
+                <div ref={chatRef} className="h-full w-full max-w-7xl overflow-y-auto overflow-x-hidden px-24 mx-auto mt-12 scroll-smooth">
                     {
                         messageHistory.length > 0 &&
                         messageHistory.map((message, i) => (
